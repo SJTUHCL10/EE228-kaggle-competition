@@ -390,7 +390,8 @@ with torch.no_grad():
     for i in range(test_num):
         input_voxel=vox_transform(np.load(test_dir+test_npz[i])['voxel'][34:66,34:66,34:66]).to(device)
         _,predict = net1(input_voxel.view(1,1,32,32,32))
-        predict = predict.cpu()
+        #predict = predict.cpu()
+        predict = F.softmax(predict.cpu(),dim=1)
         csv_writer.writerow([test_npz[i][:-4],predict[0,1].item()])
 
 f.close()
